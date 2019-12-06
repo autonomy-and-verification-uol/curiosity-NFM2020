@@ -13,16 +13,18 @@
 
  Assume that we always have enough battery power to go between Waypoints and operate
  the equipment so we do not model battery power.
+
+ Assume that we run for 200 time steps.
+
+ Assume that it is always windy at A.
 */
 
 datatype Command = PatrolA | PatrolB | PatrolC | ArmUp | ArmDown | MastUp | MastDown
 datatype Environment = Windy | Radiation | Fine
 datatype Waypoint = A | B | C |origin
-//should be a 'D' or 'origin'?
-//add a main method where environement values are assigned
 
 method Main() 
-// Main method to get things going - might also be able to run some test cases through here 
+// Main method to get things going and to test the output 
 {
     var acts := CuriosityAgent(Wheels.Ready(), Arm.Ready(), Mast.Ready());
     print acts;
@@ -34,7 +36,7 @@ ensures (wheelsready && armready && mastready) == false ==> actions ==[];
 //should visit all 3?
 //most dangerous last?
 //stop as soon as all 3 are visited
-//another node: environment
+
 {
     var visitA:bool, visitB:bool, visitC:bool;
     actions := [];
@@ -43,11 +45,12 @@ ensures (wheelsready && armready && mastready) == false ==> actions ==[];
 
     if(wheelsready && armready && mastready)
     {
+        var current := origin;
+
         while(time <=200)
         decreases 200 - time;
         invariant 0 <= time;
         {
-            var current := getcurrentwaypoint();
             var next := getnextwaypoint(current);
             var wind := getWind(next);
             var rad := getRad(next, time);
@@ -72,10 +75,6 @@ ensures (wheelsready && armready && mastready) == false ==> actions ==[];
                 }
             
             }
-            time := time +10;
-            wind := getWind(next);
-            rad := getRad(next, time);
-            env := getEnvironment(next, wind, rad);
 
             if(current == B)
             {
@@ -96,10 +95,6 @@ ensures (wheelsready && armready && mastready) == false ==> actions ==[];
                 }
             
             }
-            time := time + 10;
-            wind := getWind(next);
-            rad := getRad(next, time);
-            env := getEnvironment(next, wind, rad);
 
             if(current == C)
             {
@@ -121,6 +116,7 @@ ensures (wheelsready && armready && mastready) == false ==> actions ==[];
             
             }
             time := time + 10;
+            current := next;
         }
         time := time + 10;
     }
