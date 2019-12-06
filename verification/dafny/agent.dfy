@@ -16,7 +16,7 @@
 
  Assume that we run for 200 time steps.
 
- Assume that it is always windy at A.
+ Assume that it is always windy at A, so keep the mast and the arm down here.
 */
 
 datatype Command = PatrolA | PatrolB | PatrolC | ArmUp | ArmDown | MastUp | MastDown
@@ -46,78 +46,74 @@ ensures (wheelsready && armready && mastready) == false ==> actions ==[];
     if(wheelsready && armready && mastready)
     {
         var current := origin;
+        var next, wind, rad, env;
 
         while(time <=200)
         decreases 200 - time;
         invariant 0 <= time;
+        invariant !(current == B  && env == Radiation);//^ runtime check, rover can't be in B if there is radiation
         {
-            var next := getnextwaypoint(current);
-            var wind := getWind(next);
-            var rad := getRad(next, time);
-            var env := getEnvironment(next, wind, rad);
+            next := getnextwaypoint(current);
+            wind := getWind(next);
+            rad := getRad(next, time);
+            env := getEnvironment(next, wind, rad);
             
             if(current == A)
-            {
+            {//keep moving in order once there is no radiation
                 if(env == Fine)
                 {
                     actions := actions + [PatrolB, ArmUp, MastUp];
-                    next := B;
+                    current := next;
                 }
                 else if(env == Windy)
                 { 
                     actions := actions + [PatrolB, ArmDown, MastDown];
-                    next := B;
+                    current := next;
                 }
                 else if (env==Radiation)
                 {
                     actions := actions + [PatrolC];
-                    next := C;
+                    current := C;
                 }
             
             }
 
-            if(current == B)
+            else if(current == B)
             {
                 if(env == Fine)
                 {
                     actions := actions + [PatrolC, ArmUp, MastUp];
-                    next := C;
+                    current := next;
                 }
                 else if(env == Windy)
                 { 
                     actions := actions + [PatrolC, ArmDown, MastDown];
-                    next := C;
+                    current := next;
                 }
                 else if (env==Radiation)
                 {
                     actions := actions + [PatrolA];
-                    next := A;
+                    current := A;
                 }
             
             }
 
-            if(current == C)
+            else if(current == C || current == origin)
             {
                 if(env == Fine)
                 {
                     actions := actions + [PatrolA, ArmUp, MastUp];
-                    next := A;
+                    current := next;
                 }
                 else if(env == Windy)
                 { 
                     actions := actions + [PatrolA, ArmDown, MastDown];
-                    next := A;
-                }
-                else if (env==Radiation)
-                {
-                    actions := actions + [PatrolB];
-                    next := B;
+                    current := next;
                 }
             
             }
             time := time + 10;
-            current := next;
-        }
+         }
         time := time + 10;
     }
 }
