@@ -17,7 +17,7 @@
 
 datatype Command = PatrolA | PatrolB | PatrolC | ArmUp | ArmDown | MastUp | MastDown
 datatype Environment = Windy | Radiation | Fine
-datatype Waypoint = A | B | C 
+datatype Waypoint = A | B | C |origin
 //should be a 'D' or 'origin'?
 //add a main method where environement values are assigned
 
@@ -25,91 +25,102 @@ method Main()
 // Main method to get things going - might also be able to run some test cases through here 
 {
     var acts := CuriosityAgent(Wheels.Ready(), Arm.Ready(), Mast.Ready());
+    print acts;
 }
+
 method CuriosityAgent(wheelsready:bool, armready:bool, mastready:bool) returns (actions: seq<Command>)
 ensures (wheelsready && armready && mastready) == false ==> actions ==[];
-ensures (wheelsready && armready && mastready) == true ==> |actions| > 0;
+//ensures (wheelsready && armready && mastready) == true ==> |actions| > 0;
 //should visit all 3?
 //most dangerous last?
 //stop as soon as all 3 are visited
 //another node: environment
 {
+    var visitA:bool, visitB:bool, visitC:bool;
     actions := [];
     var time := 0;
-   // while()//not all locations have been visited
+
+
     if(wheelsready && armready && mastready)
     {
-        var lastvisited := getcurrentwaypoint();
-        var wind := getWind(lastvisited);
-        var rad := getRad(lastvisited, time);
-        var env := getEnvironment(lastvisited, wind, rad);
-
-        if(lastvisited == A)
+        while(time <=200)
+        decreases 200 - time;
+        invariant 0 <= time;
         {
-            if(env == Fine)
-            {
-                actions := actions + [PatrolB, ArmUp, MastUp];
-                lastvisited := B;
-            }
-            else if(env == Windy)
-            { 
-                actions := actions + [PatrolB, ArmDown, MastDown];
-                lastvisited := B;
-            }
-            else if (env==Radiation)
-            {
-                actions := actions + [PatrolC];
-                lastvisited := C;
-            }
+            var current := getcurrentwaypoint();
+            var next := getnextwaypoint(current);
+            var wind := getWind(next);
+            var rad := getRad(next, time);
+            var env := getEnvironment(next, wind, rad);
             
-        }
-        time := time +10;
-        wind := getWind(lastvisited);
-        rad := getRad(lastvisited, time);
-        env := getEnvironment(lastvisited, wind, rad);
+            if(current == A)
+            {
+                if(env == Fine)
+                {
+                    actions := actions + [PatrolB, ArmUp, MastUp];
+                    next := B;
+                }
+                else if(env == Windy)
+                { 
+                    actions := actions + [PatrolB, ArmDown, MastDown];
+                    next := B;
+                }
+                else if (env==Radiation)
+                {
+                    actions := actions + [PatrolC];
+                    next := C;
+                }
+            
+            }
+            time := time +10;
+            wind := getWind(next);
+            rad := getRad(next, time);
+            env := getEnvironment(next, wind, rad);
 
-        if(lastvisited == B)
-        {
-            if(env == Fine)
+            if(current == B)
             {
-                actions := actions + [PatrolC, ArmUp, MastUp];
-                lastvisited := C;
-            }
-            else if(env == Windy)
-            { 
-                actions := actions + [PatrolC, ArmDown, MastDown];
-                lastvisited := C;
-            }
-            else if (env==Radiation)
-            {
-                actions := actions + [PatrolA];
-                lastvisited := A;
-            }
+                if(env == Fine)
+                {
+                    actions := actions + [PatrolC, ArmUp, MastUp];
+                    next := C;
+                }
+                else if(env == Windy)
+                { 
+                    actions := actions + [PatrolC, ArmDown, MastDown];
+                    next := C;
+                }
+                else if (env==Radiation)
+                {
+                    actions := actions + [PatrolA];
+                    next := A;
+                }
             
-        }
-        time := time + 10;
-        wind := getWind(lastvisited);
-        rad := getRad(lastvisited, time);
-        env := getEnvironment(lastvisited, wind, rad);
+            }
+            time := time + 10;
+            wind := getWind(next);
+            rad := getRad(next, time);
+            env := getEnvironment(next, wind, rad);
 
-        if(lastvisited == C)
-        {
-            if(env == Fine)
+            if(current == C)
             {
-                actions := actions + [PatrolA, ArmUp, MastUp];
-                lastvisited := A;
-            }
-            else if(env == Windy)
-            { 
-                actions := actions + [PatrolA, ArmDown, MastDown];
-                lastvisited := A;
-            }
-            else if (env==Radiation)
-            {
-                actions := actions + [PatrolB];
-                lastvisited := B;
-            }
+                if(env == Fine)
+                {
+                    actions := actions + [PatrolA, ArmUp, MastUp];
+                    next := A;
+                }
+                else if(env == Windy)
+                { 
+                    actions := actions + [PatrolA, ArmDown, MastDown];
+                    next := A;
+                }
+                else if (env==Radiation)
+                {
+                    actions := actions + [PatrolB];
+                    next := B;
+                }
             
+            }
+            time := time + 10;
         }
         time := time + 10;
     }
@@ -170,10 +181,15 @@ ensures w!=B && time <=100 ==> rad ==3;
     
 }
 
-method getcurrentwaypoint() returns (w:Waypoint)//helper
+function method getnextwaypoint(w:Waypoint) :Waypoint
 {
+    if w ==A then B 
+    else if w==B then C
+    else if w==origin then A
+    else A
 }
 
+//made this into modules here for readability of above code.
 module Wheels{
     function method Ready():bool
     {
