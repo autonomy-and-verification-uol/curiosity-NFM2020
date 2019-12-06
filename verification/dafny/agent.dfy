@@ -31,7 +31,7 @@ method Main()
 }
 
 method CuriosityAgent(wheelsready:bool, armready:bool, mastready:bool) returns (actions: seq<Command>)
-ensures (wheelsready && armready && mastready) == false ==> actions ==[];
+ensures (wheelsready && armready && mastready) == false ==> actions ==[];//this is a safety check - if the hardware is not ready then do nothing.
 //ensures (wheelsready && armready && mastready) == true ==> |actions| > 0;
 //should visit all 3?
 //most dangerous last?
@@ -156,7 +156,7 @@ method getRad(w:Waypoint, time:int) returns (rad:int)
 requires time >= 0;//^
 ensures rad >= 0;//^
 ensures w==B && time <=100 ==> rad ==100 - time;//^
-ensures w!=B && time <=100 ==> rad ==3;
+ensures w!=B && time <=100 ==> rad ==3;//^
 {
     if(time > 100)
     {
