@@ -1,0 +1,31 @@
+time(t) matches { topic:'time', value:t };
+time_at_least(t, min) matches { topic:'time', value:t } with t >= min;
+time_up_to(t, max) matches { topic:'time', value:t } with t <= max;
+time_or_radiation_or_waypoint matches time(_) | radiation_units(_) | waypoint(_);
+waypoint(point) matches { topic:'waypoint', value:point };
+radiation_units(val) matches { topic:'radiation', unit:val } with val >= 0;
+radiation_units_at_least(min) matches { topic:'radiation', units:val } with val >= min;
+waypoint_different_from(point) matches waypoint(point1) with point != point1; 
+
+Main = time_or_radiation_or_waypoint >> (GetRadiations1 /\ GetRadiations2 /\ GetRadiations3);
+
+GetRadiations1 =
+  (time_at_least(_, 0) \/ waypoint(_) \/ radiation_units(_)) *;
+GetRadiations2 =
+  (radiation_units_at_least(0) \/ waypoint(_) \/ time(_)) *;
+GetRadiations3 =
+  {let t; time(t) (waypoint('B') GetRadiations3a<100-t> \/ waypoint_different_from('B') GetRadiations3b<100-t> \/ GetRadiations3) };
+
+
+GetRadiations3a<rad> =
+  if(rad<0) (GetRadiations3a<0>)
+  else (radiation_units(rad) GetRadiations3a<rad> \/
+  { let t; time(t) GetRadiations3a<100-t> } \/
+  waypoint_different_from('B') GetRadiations3b<rad> \/
+  waypoint('B') GetRadiations3a<rad>);
+GetRadiations3b<rad> =
+  if(rad<0) (GetRadiations3b<0>)
+  else (radiation_units(3) GetRadiations3b<rad> \/
+  waypoint('B') GetRadiations3a<rad> \/
+  { let t; time(t) GetRadiation3b<100-t> } \/
+  waypoint_different_from('B') GetRadiations3b<rad>);
