@@ -1,0 +1,15 @@
+wind_speed(val) matches { topic:'wind', speed:val } with val >= 0;
+wind_speed_at_least(min) matches { topic:'wind', speed:val } with val >= n;
+waypoint(point) matches { topic:'waypoint', value:point };
+not_waypoint(point) not matches waypoint(point) | wind_speed;
+wind_speed_or_way_point matches wind_speed(_) | waypoint(_);
+
+Main = GetWindConstraints;
+
+GetWindConstraints = wind_speed_or_way_point >> (GetWindConstraints1 /\ GetWindConstraints2);
+GetWindConstraints1 =
+  (wind_speed_at_least(0) \/ waypoint(_)) *;
+GetWindConstraints2 =
+  waypoint('A') GetWindConstraints3 \/ wind_speed(2) GetWindConstraints2 \/ not_waypoint_wind('A') GetWindConstraints2;
+GetWindConstraints3 =
+  wind_speed(10) GetWindConstraints3 \/ not_waypoint_wind('A') GetWindConstraints2;
