@@ -1,9 +1,9 @@
 wind_speed(val) matches { topic:'wind', speed:val } with val >= 0;
 radiation_units(val) matches { topic:'radiation', unit:val } with val >= 0;
-wind_speed_up_to(max) matches { topic:'wind', speed:val } with val <= n;
-wind_speed_at_least(min) matches { topic:'wind', speed:val } with val >= n;
-radiation_units_up_to(max) matches { topic:'radiation', units:val } with val <= n;
-radiation_units_at_least(min) matches { topic:'radiation', units:val } with val >= n;
+wind_speed_up_to(max) matches { topic:'wind', speed:val } with val <= max;
+wind_speed_at_least(min) matches { topic:'wind', speed:val } with val >= min;
+radiation_units_up_to(max) matches { topic:'radiation', units:val } with val <= max;
+radiation_units_at_least(min) matches { topic:'radiation', units:val } with val >= min;
 environment(status) matches { topic:'environment', status:status };
 
 Main = GetEnvironmentConstraints;
