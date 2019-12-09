@@ -1,0 +1,49 @@
+--include "types.csp"
+--include "channels.csp"
+
+Server =
+  actionlib_init_server ->
+  start_server ->
+  Actions
+
+
+
+
+Actions =
+(
+  Connect |||  (Result(False) [|  {| set_result|} |] (CallbackLoop [| {|goal_done|} |] WaitResultHandler))
+)/\ shutdown -> SKIP
+
+CallbackLoop =
+  send_goal?dir?dist?speed -> Callback(dir, dist, speed)
+
+Callback(dir, dist, speed) =
+  -- do the thing
+  set_result!True ->
+  goal_done ->
+  SKIP
+
+WaitResultHandler =
+wait_for_result_call ->
+goal_done ->
+wait_for_result_ret ->
+WaitResultHandler
+
+Result(result) =
+
+get_result!result -> Result(result)
+[]
+set_result?newResult -> Result(newResult)
+
+
+
+
+Connect =
+  wait_for_server_call ->
+  -- Make connection to client
+  wait_for_server_ret ->
+  Connect
+
+assert Server;loop(loopChan -> SKIP) :[deadlock free]
+assert Server  :[divergence free]
+assert Server  :[deterministic]

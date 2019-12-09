@@ -1,0 +1,16 @@
+--ActionLib Client Model
+--include "types.csp"
+--include "channels.csp"
+
+
+client(dir, dist, speed) =
+  actionlib_init_client->
+  wait_for_server_call -> wait_for_server_ret ->
+  send_goal.dir.dist.speed ->
+  wait_for_result_call -> wait_for_result_ret ->
+  get_result?result -> shutdown ->
+  SKIP
+
+assert client(Forw,1,1);loop(loopChan -> SKIP) :[deadlock free]
+assert client(Forw,1,1)  :[divergence free]
+assert client(Forw,1,1)  :[deterministic]

@@ -1,0 +1,16 @@
+external loop
+
+channel wait_for_server_call,  wait_for_server_ret
+channel wait_for_result_call, wait_for_result_ret
+channel actionlib_init_client, actionlib_init_server
+channel start_server
+channel set_suceeded, set_aborted, set_preempted
+channel shutdown
+
+
+channel goal_done
+
+-- should be parameterised
+channel send_goal : direction.distance.speed
+channel get_result : Bool
+channel set_result : Bool

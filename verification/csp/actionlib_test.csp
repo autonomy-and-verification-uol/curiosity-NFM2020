@@ -1,0 +1,14 @@
+include "types.csp"
+include "channels.csp"
+
+include "actionlib_client.csp"
+include "actionlib_server.csp"
+
+alphaActionList = {|wait_for_server_call,  wait_for_server_ret, send_goal,
+                    wait_for_result_call, wait_for_result_ret, get_result, shutdown  |}
+
+ActionLib_Test = client(Forw,1,1) [| alphaActionList |] Server
+
+assert ActionLib_Test;loop(loopChan -> SKIP) :[deadlock free]
+assert ActionLib_Test  :[divergence free]
+assert ActionLib_Test  :[deterministic]
