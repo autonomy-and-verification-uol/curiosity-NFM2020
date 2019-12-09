@@ -6,7 +6,7 @@ radiation_units_up_to(max) matches { topic:'radiation', units:val } with val <= 
 radiation_units_at_least(min) matches { topic:'radiation', units:val } with val >= min;
 environment(status) matches { topic:'environment', status:status };
 
-Main = GetEnvironmentConstraints;
+Main = (GetEnvironmentConstraints /\ (wind_speed(_) >> wind_speed_at_least(0)*) /\ (radiation_units(_) >> radiation_units_at_least(0)*));
 
 GetEnvironmentConstraints =
   wind_speed_up_to(4) GetEnvironmentConstraints1 \/ radiation_units_up_to(4) GetEnvironmentConstraints2 \/ any GetEnvironmentConstraints;
