@@ -1,14 +1,23 @@
+-- root: actionlib_test.csp
 external loop
 
+-- Generic ActionLib Channels
 channel wait_for_server_call,  wait_for_server_ret
 channel wait_for_result_call, wait_for_result_ret
 channel actionlib_init_client, actionlib_init_server
 channel start_server
 channel set_suceeded, set_aborted, set_preempted
 channel shutdown
-
-
 channel goal_done
+
+--- Agent Channels
+channel gwendolen_curiosity_arm : ArmMode
+channel curiosity_to_agent : ArmMode
+
+
+-- Client Channels
+channel send_goal_arm : ArmMode
+
 
 -- should be parameterised
 channel send_goal : direction.distance.speed

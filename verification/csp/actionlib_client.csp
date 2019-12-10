@@ -1,3 +1,4 @@
+-- root: actionlib_test.csp
 --ActionLib Client Model
 --include "types.csp"
 --include "channels.csp"
