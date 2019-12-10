@@ -3,6 +3,7 @@ nametype distance = {1..5}
 nametype speed = {1..5}
 
 datatype ArmMode = open | close
+datatype NodeName = arm | mast | wheels
 
 
 channel loopChan
