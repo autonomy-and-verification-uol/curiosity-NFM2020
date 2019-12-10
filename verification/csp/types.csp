@@ -2,8 +2,10 @@ datatype direction = Forw | Back | Right | Left | Stop
 nametype distance = {1..5}
 nametype speed = {1..5}
 
-datatype ArmMode = open | close
+datatype ArmMode = openArm | closeArm
+datatype MastMode = openMast | closeMast
 datatype NodeName = arm | mast | wheels
+
 
 
 channel loopChan
