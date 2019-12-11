@@ -4,10 +4,11 @@
 -- include "types.csp"
 -- include "channels.csp"
 
+--TODO Actually wrong, this only inits the client after getting told to move the arm
 arm_client_node =
   gwendolen_curiosity_arm?modereq ->
-  (goal_arm(modereq) [| {|get_result |} |] arm_client(modereq)) ;
-  arm_client_node
+  (goal_arm(modereq) [| {|get_result, shutdown |} |] arm_client(modereq)) ;
+  SKIP
 
 arm_client(modereq) =
   actionlib_init_client->
@@ -22,4 +23,5 @@ goal_arm(modereq) =
 -- this is in the code, no matter the result we publish the arm is at the requested position.
 -- Unless I've misread and it changes the modereq variable inside the ActionLib weirdness...
   arm_curiosity_to_agent_nodeResult!modereq ->
+  shutdown ->
   SKIP
