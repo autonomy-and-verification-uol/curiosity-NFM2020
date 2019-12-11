@@ -6,16 +6,14 @@
 --TODO Actually wrong, this only inits the client after getting told to move the wheels
 wheels_client_node =
   gwendolen_curiosity_wheels?modereq ->
-  (goal_wheels(modereq) [| {|get_result, shutdown |} |] wheels_client(modereq)) ;
-  SKIP
+  wheels_client(modereq)
 
 wheels_client(modereq) =
   actionlib_init_client->
   wait_for_server_call.wheels -> wait_for_server_ret.wheels ->
   send_goal_wheels!modereq ->
   wait_for_result_call.wheels -> wait_for_result_ret.wheels ->
-  get_result?result -> shutdown ->
-  SKIP
+  goal_wheels(modereq)
 
 goal_wheels(modereq) =
   get_result?result ->

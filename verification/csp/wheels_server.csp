@@ -25,12 +25,13 @@ wheels_Server_Actions =
 start_actions.wheels ->
 (
 CallbackLoop_wheels
-)/\ shutdown -> SKIP
+)
 
 
 CallbackLoop_wheels =
   send_goal_wheels?direction?distance?speed ->
-  execute_cb_wheels(direction, distance ,speed )
+  execute_cb_wheels(direction, distance ,speed );
+  shutdown -> SKIP
 
 
 execute_cb_wheels(direction, distance ,speed) =

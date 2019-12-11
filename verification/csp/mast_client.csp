@@ -6,16 +6,14 @@
 --TODO Actually wrong, this only inits the client after getting told to move the mast
 mast_client_node =
   gwendolen_curiosity_mast?modereq ->
-  (goal_mast(modereq) [| {|get_result, shutdown |} |] mast_client(modereq)) ;
-  SKIP
+  mast_client(modereq) 
 
 mast_client(modereq) =
   actionlib_init_client->
   wait_for_server_call.mast -> wait_for_server_ret.mast ->
   send_goal_mast!modereq ->
   wait_for_result_call.mast -> wait_for_result_ret.mast ->
-  get_result?result -> shutdown ->
-  SKIP
+  goal_mast(modereq)
 
 goal_mast(modereq) =
   get_result?result ->

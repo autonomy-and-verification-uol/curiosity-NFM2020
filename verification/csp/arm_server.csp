@@ -22,13 +22,14 @@ SKIP
 
 Arm_Server_Actions =
 start_actions.arm ->
-(
 CallbackLoop_arm
-)/\ shutdown -> SKIP
+
 
 
 CallbackLoop_arm =
-  send_goal_arm?modereq -> execute_cb_arm(modereq)
+  send_goal_arm?modereq ->
+  execute_cb_arm(modereq);
+  shutdown -> SKIP
 
 
 execute_cb_arm(modereq) =

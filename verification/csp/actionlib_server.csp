@@ -5,13 +5,14 @@
 Server(nodeName) =
   actionlib_init_server.nodeName ->
   start_server.nodeName ->
+  Connect(nodeName) ;
   start_actions.nodeName ->
   Actions(nodeName)
 
 Actions(nodeName) =
 (
-  Connect(nodeName) |||  (Result(nodeName, False) ||| WaitResultHandler(nodeName))
-)/\ shutdown -> SKIP
+  Result(nodeName, False) [| {|shutdown|} |] WaitResultHandler(nodeName)
+)
 
 -------------------------Implement this in each server -----------
 -- CallbackLoop =
@@ -25,25 +26,29 @@ Actions(nodeName) =
 ---------------------------------------------------------
 
 WaitResultHandler(nodeName) =
-wait_for_result_call.nodeName ->
-goal_done.nodeName ->
-wait_for_result_ret.nodeName ->
-WaitResultHandler(nodeName)
+(
+  wait_for_result_call.nodeName ->
+  goal_done.nodeName ->
+  wait_for_result_ret.nodeName ->
+  WaitResultHandler(nodeName)
+)
+[]
+shutdown -> SKIP
 
 Result(nodeName,result) =
 
 get_result.nodeName!result -> Result(nodeName,result)
 []
 set_result.nodeName?newResult -> Result(nodeName,newResult)
-
-
+[]
+shutdown -> SKIP
 
 
 Connect(nodeName) =
   wait_for_server_call.nodeName ->
   -- Make connection to client
   wait_for_server_ret.nodeName ->
-  Connect(nodeName)
+ SKIP
 
 assert Server(wheels);loop(loopChan -> SKIP) :[deadlock free]
 assert Server(wheels)  :[divergence free]

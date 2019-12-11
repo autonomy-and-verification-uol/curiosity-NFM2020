@@ -22,13 +22,14 @@ SKIP
 
 Mast_Server_Actions =
 start_actions.mast ->
-(
 CallbackLoop_mast
-)/\ shutdown -> SKIP
+
 
 
 CallbackLoop_mast =
-  send_goal_mast?modereq -> execute_cb_mast(modereq)
+  send_goal_mast?modereq ->
+  execute_cb_mast(modereq) ;
+  shutdown -> SKIP
 
 
 execute_cb_mast(modereq) =
