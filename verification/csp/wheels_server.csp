@@ -1,0 +1,63 @@
+-- root: curiosity.csp
+-- wheels_server
+-- Models wheels_server.py
+-- include "types.csp"
+-- include "channels.csp"
+-- include "actionlib_server.csp"
+
+
+alphawheelsServer = {| start_server.wheels, start_actions.wheels, shutdown, set_result.wheels , goal_done.wheels |}
+
+CuriosityMarsRoverwheels =
+-- All methods that we've abstracted
+  wait_publishers_to_be_ready.wheels ->
+  init_publisher_variables.wheels ->
+  init_state.wheels ->
+(
+Server(wheels)
+  [| alphawheelsServer |]
+start_server.wheels-> curiosity_to_agent_nodeName.wheels -> wheels_Server_Actions
+)  ;
+SKIP
+
+
+wheels_Server_Actions =
+start_actions.wheels ->
+(
+CallbackLoop_wheels
+)/\ shutdown -> SKIP
+
+
+CallbackLoop_wheels =
+  send_goal_wheels?direction?distance?speed ->
+  execute_cb_wheels(direction, distance ,speed )
+
+
+execute_cb_wheels(direction, distance ,speed) =
+  -- do the thing
+(  if direction == Forw then
+    move_forwards.distance.speed -> SKIP
+  else
+  if direction == Back then
+    move_backwards.distance.speed -> SKIP
+  else
+  if direction == Left then
+    move_turn_left.distance.speed -> SKIP
+  else
+  if direction == Right then
+    move_turn_right.distance.speed -> SKIP
+  else
+  if direction == Stop then
+    move_turn_stop -> SKIP
+  else
+    SKIP
+);
+-- Just sets to true because methods we're abstracting only return true
+  set_result.wheels!True ->
+  set_suceeded ->
+  goal_done.wheels ->
+  SKIP
+
+assert CuriosityMarsRoverwheels;loop(loopChan -> SKIP) :[deadlock free]
+assert CuriosityMarsRoverwheels  :[divergence free]
+assert CuriosityMarsRoverwheels  :[deterministic]

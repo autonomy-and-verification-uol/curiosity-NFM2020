@@ -10,18 +10,18 @@ alphamastServer = {| start_server, start_actions, shutdown, set_result , goal_do
 
 CuriosityMarsRoverMast =
 -- Both methods that we've abstracted
-  wait_publishers_to_be_ready ->
-  init_publisher_variables ->
+  wait_publishers_to_be_ready.mast ->
+  init_publisher_variables.mast ->
 (
-Server
+Server(mast)
   [| alphamastServer |]
-start_server-> curiosity_to_agent_nodeName.mast -> Mast_Server_Actions
+start_server.mast-> curiosity_to_agent_nodeName.mast -> Mast_Server_Actions
 )  ;
 SKIP
 
 
 Mast_Server_Actions =
-start_actions ->
+start_actions.mast ->
 (
 CallbackLoop_mast
 )/\ shutdown -> SKIP
@@ -36,9 +36,9 @@ execute_cb_mast(modereq) =
   set_mast_pose.modereq ->
 -- Just sets to true because the `return False` in `set_mast_pose` is avoided
 -- by the type of modereq
-  set_result!True ->
+  set_result.mast!True ->
   set_suceeded ->
-  goal_done ->
+  goal_done.mast ->
   SKIP
 
 assert CuriosityMarsRoverMast;loop(loopChan -> SKIP) :[deadlock free]

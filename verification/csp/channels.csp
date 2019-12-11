@@ -2,40 +2,48 @@
 external loop
 
 -- Generic ActionLib Channels
-channel wait_for_server_call,  wait_for_server_ret
-channel wait_for_result_call, wait_for_result_ret
-channel actionlib_init_client, actionlib_init_server
-channel start_server
+channel wait_for_server_call,  wait_for_server_ret : NodeName
+channel wait_for_result_call, wait_for_result_ret : NodeName
+channel actionlib_init_client
+channel actionlib_init_server : NodeName
+channel start_server : NodeName
 channel set_suceeded, set_aborted, set_preempted
-channel shutdown
-channel goal_done
+channel shutdown 
+channel goal_done : NodeName
 
 -- Internal Actionlib Channels
 
-channel start_actions
+channel start_actions: NodeName
 
 --- Agent Channels
 channel gwendolen_curiosity_arm : ArmMode
 channel gwendolen_curiosity_mast : MastMode
+channel gwendolen_curiosity_wheels : direction.distance.speed
 
 channel curiosity_to_agent_nodeName : NodeName
 channel arm_curiosity_to_agent_nodeResult : ArmMode
 channel mast_curiosity_to_agent_nodeResult : MastMode
-channel wheels_curiosity_to_agent_nodeResult
+channel wheels_curiosity_to_agent_nodeResult -- Because the program publishes 'done'
 
 
 
 -- Client Channels
 channel send_goal_arm : ArmMode
 channel send_goal_mast : MastMode
+channel send_goal_wheels : direction.distance.speed
+
 
 -- Server Channels
-channel wait_publishers_to_be_ready
-channel init_publisher_variables
+channel wait_publishers_to_be_ready: NodeName
+channel init_publisher_variables: NodeName
+channel init_state: NodeName -- Only in Wheels
+
 channel set_arm_pose : ArmMode
 channel set_mast_pose : MastMode
+channel move_forwards, move_backwards, move_turn_left, move_turn_right : distance.speed
+channel move_turn_stop
 
 -- should be parameterised
 channel send_goal : direction.distance.speed
-channel get_result : Bool
-channel set_result : Bool
+channel get_result : NodeName. Bool
+channel set_result : NodeName. Bool

@@ -11,9 +11,9 @@ mast_client_node =
 
 mast_client(modereq) =
   actionlib_init_client->
-  wait_for_server_call -> wait_for_server_ret ->
+  wait_for_server_call.mast -> wait_for_server_ret.mast ->
   send_goal_mast!modereq ->
-  wait_for_result_call -> wait_for_result_ret ->
+  wait_for_result_call.mast -> wait_for_result_ret.mast ->
   get_result?result -> shutdown ->
   SKIP
 

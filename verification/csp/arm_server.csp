@@ -10,18 +10,18 @@ alphaArmServer = {| start_server, start_actions, shutdown, set_result , goal_don
 
 CuriosityMarsRoverArm =
 -- Both methods that we've abstracted
-  wait_publishers_to_be_ready ->
-  init_publisher_variables ->
+  wait_publishers_to_be_ready.arm ->
+  init_publisher_variables.arm ->
 (
-Server
+Server(arm)
   [| alphaArmServer |]
-start_server-> curiosity_to_agent_nodeName.arm -> Arm_Server_Actions
+start_server.arm-> curiosity_to_agent_nodeName.arm -> Arm_Server_Actions
 )  ;
 SKIP
 
 
 Arm_Server_Actions =
-start_actions ->
+start_actions.arm ->
 (
 CallbackLoop_arm
 )/\ shutdown -> SKIP
@@ -36,9 +36,9 @@ execute_cb_arm(modereq) =
   set_arm_pose.modereq ->
 -- Just sets to true because the `return False` in `set_arm_pose` is avoided
 -- by the type of modereq
-  set_result!True ->
+  set_result.arm!True ->
   set_suceeded ->
-  goal_done ->
+  goal_done.arm ->
   SKIP
 
 assert CuriosityMarsRoverArm;loop(loopChan -> SKIP) :[deadlock free]

@@ -6,9 +6,9 @@
 
 client(dir, dist, speed) =
   actionlib_init_client->
-  wait_for_server_call -> wait_for_server_ret ->
+  wait_for_server_call.wheels -> wait_for_server_ret.wheels ->
   send_goal.dir.dist.speed ->
-  wait_for_result_call -> wait_for_result_ret ->
+  wait_for_result_call.wheels -> wait_for_result_ret.wheels ->
   get_result?result -> shutdown ->
   SKIP
 
