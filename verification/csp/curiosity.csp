@@ -1,0 +1,23 @@
+-- Main Model File
+include "types.csp"
+include "channels.csp"
+include "actionlib_server.csp"
+include "arm_client.csp"
+include "arm_server.csp"
+include "mast_client.csp"
+include "mast_server.csp"
+
+
+alphaActionList = {|wait_for_server_call,  wait_for_server_ret,
+                    wait_for_result_call, wait_for_result_ret, get_result, shutdown  |}
+
+
+Curiosity =
+  (arm_client_node [| union(alphaActionList, {|send_goal_arm |}) |] CuriosityMarsRoverArm)
+  [| {|shutdown|} |]
+  (mast_client_node [| union(alphaActionList, {|send_goal_mast |}) |] CuriosityMarsRoverMast)
+
+
+assert Curiosity;loop(loopChan -> SKIP) :[deadlock free]
+assert Curiosity  :[divergence free]
+assert Curiosity  :[deterministic]

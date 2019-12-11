@@ -1,0 +1,46 @@
+-- root: curiosity.csp
+-- arm_server
+-- Models arm_server.py
+-- include "types.csp"
+-- include "channels.csp"
+-- include "actionlib_server.csp"
+
+
+alphaArmServer = {| start_server, start_actions, shutdown, set_result , goal_done |}
+
+CuriosityMarsRoverArm =
+-- Both methods that we've abstracted
+  wait_publishers_to_be_ready ->
+  init_publisher_variables ->
+(
+Server
+  [| alphaArmServer |]
+start_server-> curiosity_to_agent_nodeName.arm -> Arm_Server_Actions
+)  ;
+SKIP
+
+
+Arm_Server_Actions =
+start_actions ->
+(
+CallbackLoop_arm
+)/\ shutdown -> SKIP
+
+
+CallbackLoop_arm =
+  send_goal_arm?modereq -> execute_cb_arm(modereq)
+
+
+execute_cb_arm(modereq) =
+  -- do the thing
+  set_arm_pose.modereq ->
+-- Just sets to true because the `return False` in `set_arm_pose` is avoided
+-- by the type of modereq
+  set_result!True ->
+  set_suceeded ->
+  goal_done ->
+  SKIP
+
+assert CuriosityMarsRoverArm;loop(loopChan -> SKIP) :[deadlock free]
+assert CuriosityMarsRoverArm  :[divergence free]
+assert CuriosityMarsRoverArm  :[deterministic]

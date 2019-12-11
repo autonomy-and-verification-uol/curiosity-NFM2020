@@ -1,0 +1,25 @@
+-- root: curiosity.csp
+-- mast_client
+-- Models mast_client.py
+
+
+mast_client_node =
+  gwendolen_curiosity_mast?modereq ->
+  (goal_mast(modereq) [| {|get_result, shutdown |} |] mast_client(modereq)) ;
+  SKIP
+
+mast_client(modereq) =
+  actionlib_init_client->
+  wait_for_server_call -> wait_for_server_ret ->
+  send_goal_mast!modereq ->
+  wait_for_result_call -> wait_for_result_ret ->
+  get_result?result -> shutdown ->
+  SKIP
+
+goal_mast(modereq) =
+  get_result?result ->
+-- this is in the code, no matter the result we publish the mast is at the requested position.
+-- Unless I've misread and it changes the modereq variable inside the ActionLib weirdness...
+  mast_curiosity_to_agent_nodeResult.modereq ->
+  shutdown ->
+  SKIP

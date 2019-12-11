@@ -1,0 +1,25 @@
+-- root: curiosity.csp
+-- arm_client
+-- Models arm_client.py
+-- include "types.csp"
+-- include "channels.csp"
+
+arm_client_node =
+  gwendolen_curiosity_arm?modereq ->
+  (goal_arm(modereq) [| {|get_result |} |] arm_client(modereq)) ;
+  arm_client_node
+
+arm_client(modereq) =
+  actionlib_init_client->
+  wait_for_server_call -> wait_for_server_ret ->
+  send_goal_arm!modereq ->
+  wait_for_result_call -> wait_for_result_ret ->
+  get_result?result -> shutdown ->
+  SKIP
+
+goal_arm(modereq) =
+  get_result?result ->
+-- this is in the code, no matter the result we publish the arm is at the requested position.
+-- Unless I've misread and it changes the modereq variable inside the ActionLib weirdness...
+  arm_curiosity_to_agent_nodeResult!modereq ->
+  SKIP
