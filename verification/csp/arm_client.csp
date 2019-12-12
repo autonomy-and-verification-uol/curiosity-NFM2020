@@ -7,7 +7,7 @@
 --TODO Actually wrong, this only inits the client after getting told to move the arm
 arm_client_node =
   gwendolen_curiosity_arm?modereq ->
-   arm_client(modereq) 
+   arm_client(modereq)
 
 arm_client(modereq) =
   actionlib_init_client->
@@ -17,7 +17,7 @@ arm_client(modereq) =
   goal_arm(modereq)
 
 goal_arm(modereq) =
-  get_result?result ->
+  get_result.arm?result ->
 -- this is in the code, no matter the result we publish the arm is at the requested position.
 -- Unless I've misread and it changes the modereq variable inside the ActionLib weirdness...
   arm_curiosity_to_agent_nodeResult!modereq ->

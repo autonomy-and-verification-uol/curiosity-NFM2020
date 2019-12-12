@@ -6,7 +6,7 @@
 --TODO Actually wrong, this only inits the client after getting told to move the mast
 mast_client_node =
   gwendolen_curiosity_mast?modereq ->
-  mast_client(modereq) 
+  mast_client(modereq)
 
 mast_client(modereq) =
   actionlib_init_client->
@@ -16,7 +16,7 @@ mast_client(modereq) =
   goal_mast(modereq)
 
 goal_mast(modereq) =
-  get_result?result ->
+  get_result.mast?result ->
 -- this is in the code, no matter the result we publish the mast is at the requested position.
 -- Unless I've misread and it changes the modereq variable inside the ActionLib weirdness...
   mast_curiosity_to_agent_nodeResult.modereq ->

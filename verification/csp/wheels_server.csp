@@ -30,6 +30,7 @@ CallbackLoop_wheels
 
 CallbackLoop_wheels =
   send_goal_wheels?direction?distance?speed ->
+  executeGoal.wheels ->
   execute_cb_wheels(direction, distance ,speed );
   shutdown -> SKIP
 

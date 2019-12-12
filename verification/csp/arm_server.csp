@@ -28,6 +28,7 @@ CallbackLoop_arm
 
 CallbackLoop_arm =
   send_goal_arm?modereq ->
+  executeGoal.arm -> 
   execute_cb_arm(modereq);
   shutdown -> SKIP
 

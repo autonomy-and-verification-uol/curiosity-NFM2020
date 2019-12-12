@@ -8,6 +8,7 @@ include "mast_client.csp"
 include "mast_server.csp"
 include "wheels_client.csp"
 include "wheels_server.csp"
+include "properties.csp"
 
 alphaActionList = {|wait_for_server_call,  wait_for_server_ret,
                     wait_for_result_call, wait_for_result_ret, get_result, shutdown  |}

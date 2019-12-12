@@ -28,6 +28,7 @@ CallbackLoop_mast
 
 CallbackLoop_mast =
   send_goal_mast?modereq ->
+  executeGoal.mast ->
   execute_cb_mast(modereq) ;
   shutdown -> SKIP
 

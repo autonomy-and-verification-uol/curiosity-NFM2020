@@ -8,7 +8,7 @@ channel actionlib_init_client
 channel actionlib_init_server : NodeName
 channel start_server : NodeName
 channel set_suceeded, set_aborted, set_preempted
-channel shutdown 
+channel shutdown
 channel goal_done : NodeName
 
 -- Internal Actionlib Channels
@@ -37,6 +37,8 @@ channel send_goal_wheels : direction.distance.speed
 channel wait_publishers_to_be_ready: NodeName
 channel init_publisher_variables: NodeName
 channel init_state: NodeName -- Only in Wheels
+
+channel executeGoal : NodeName
 
 channel set_arm_pose : ArmMode
 channel set_mast_pose : MastMode

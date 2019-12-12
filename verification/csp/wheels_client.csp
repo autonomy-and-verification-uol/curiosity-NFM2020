@@ -16,7 +16,7 @@ wheels_client(modereq) =
   goal_wheels(modereq)
 
 goal_wheels(modereq) =
-  get_result?result ->
+  get_result.wheels?result ->
   wheels_curiosity_to_agent_nodeResult -> -- Becasue the program publishes 'done'
   shutdown ->
   SKIP
