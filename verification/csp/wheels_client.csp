@@ -2,8 +2,6 @@
 -- wheels_client
 -- Models wheels_client.py
 
-
---TODO Actually wrong, this only inits the client after getting told to move the wheels
 wheels_client_node =
   gwendolen_curiosity_wheels?modereq ->
   wheels_client(modereq)

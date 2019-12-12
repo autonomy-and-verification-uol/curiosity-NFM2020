@@ -23,7 +23,6 @@ Curiosity =
   [| {|shutdown|} |]
     (wheels_client_node [| union(alphaActionList, {|send_goal_wheels |}) |] CuriosityMarsRoverwheels)
 
-assert (wheels_client_node [| union(alphaActionList, {|send_goal_wheels |}) |] CuriosityMarsRoverwheels);loop(loopChan -> SKIP) :[deadlock free]
 
 assert Curiosity;loop(loopChan -> SKIP) :[deadlock free]
 assert Curiosity  :[divergence free]

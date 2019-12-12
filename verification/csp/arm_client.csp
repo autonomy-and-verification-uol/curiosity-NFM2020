@@ -1,12 +1,11 @@
 -- root: curiosity.csp
 -- arm_client
 -- Models arm_client.py
--- include "types.csp"
--- include "channels.csp"
 
---TODO Actually wrong, this only inits the client after getting told to move the arm
 arm_client_node =
   gwendolen_curiosity_arm?modereq ->
+
+
    arm_client(modereq)
 
 arm_client(modereq) =

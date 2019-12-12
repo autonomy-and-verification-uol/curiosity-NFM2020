@@ -2,8 +2,6 @@
 -- mast_client
 -- Models mast_client.py
 
-
---TODO Actually wrong, this only inits the client after getting told to move the mast
 mast_client_node =
   gwendolen_curiosity_mast?modereq ->
   mast_client(modereq)

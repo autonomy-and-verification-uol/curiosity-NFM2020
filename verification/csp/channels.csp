@@ -28,6 +28,8 @@ channel wheels_curiosity_to_agent_nodeResult -- Because the program publishes 'd
 
 
 -- Client Channels
+
+-- types of 'goal' message
 channel send_goal_arm : ArmMode
 channel send_goal_mast : MastMode
 channel send_goal_wheels : direction.distance.speed
@@ -47,5 +49,7 @@ channel move_turn_stop
 
 -- should be parameterised
 channel send_goal : direction.distance.speed
+
+-- the 'result' message
 channel get_result : NodeName. Bool
 channel set_result : NodeName. Bool
