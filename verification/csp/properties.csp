@@ -10,6 +10,7 @@ SendThenExecute =
   send_goal_wheels?_ -> executeGoal.wheels -> SKIP
 
 assert SendThenExecute [T= Curiosity\(diff(Events, {|send_goal_arm, send_goal_mast, send_goal_wheels, executeGoal |}) )
+-- Traces, becasue otherwise it fails because of the data
 
 -- Checks that if a client sends a goal, eventually it gets a result
 SendThenResult =
@@ -20,3 +21,4 @@ SendThenResult =
   send_goal_wheels?_ -> get_result.wheels?_ -> SKIP
 
 assert SendThenResult [T= Curiosity\(diff(Events, {|send_goal_arm, send_goal_mast, send_goal_wheels, get_result |}) )
+-- Traces, becasue otherwise it fails because of the data
