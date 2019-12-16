@@ -56,7 +56,7 @@ execute_cb_wheels(direction, distance ,speed) =
 );
 -- Just sets to true because methods we're abstracting only return true
   set_result.wheels!True ->
-  set_suceeded ->
+  set_suceeded.wheels ->
   goal_done.wheels ->
   SKIP
 

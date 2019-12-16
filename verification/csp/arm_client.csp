@@ -9,7 +9,7 @@ arm_client_node =
    arm_client(modereq)
 
 arm_client(modereq) =
-  actionlib_init_client->
+  actionlib_init_client.arm->
   wait_for_server_call.arm -> wait_for_server_ret.arm ->
   send_goal_arm!modereq ->
   wait_for_result_call.arm -> wait_for_result_ret.arm ->

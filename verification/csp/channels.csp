@@ -4,10 +4,10 @@ external loop
 -- Generic ActionLib Channels
 channel wait_for_server_call,  wait_for_server_ret : NodeName
 channel wait_for_result_call, wait_for_result_ret : NodeName
-channel actionlib_init_client
+channel actionlib_init_client: NodeName
 channel actionlib_init_server : NodeName
 channel start_server : NodeName
-channel set_suceeded, set_aborted, set_preempted
+channel set_suceeded, set_aborted, set_preempted : NodeName
 channel shutdown
 channel goal_done : NodeName
 

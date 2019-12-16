@@ -28,7 +28,7 @@ CallbackLoop_arm
 
 CallbackLoop_arm =
   send_goal_arm?modereq ->
-  executeGoal.arm -> 
+  executeGoal.arm ->
   execute_cb_arm(modereq);
   shutdown -> SKIP
 
@@ -39,7 +39,7 @@ execute_cb_arm(modereq) =
 -- Just sets to true because the `return False` in `set_arm_pose` is avoided
 -- by the type of modereq
   set_result.arm!True ->
-  set_suceeded ->
+  set_suceeded.arm ->
   goal_done.arm ->
   SKIP
 

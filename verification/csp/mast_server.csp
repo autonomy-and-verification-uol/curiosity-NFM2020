@@ -39,7 +39,7 @@ execute_cb_mast(modereq) =
 -- Just sets to true because the `return False` in `set_mast_pose` is avoided
 -- by the type of modereq
   set_result.mast!True ->
-  set_suceeded ->
+  set_suceeded.mast ->
   goal_done.mast ->
   SKIP
 

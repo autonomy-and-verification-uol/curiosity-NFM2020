@@ -23,32 +23,31 @@ SendThenResult =
 assert SendThenResult [T= Curiosity\(diff(Events, {|send_goal_arm, send_goal_mast, send_goal_wheels, get_result |}) )
 -- Traces, becasue otherwise it fails because of the data
 
--- Checks that once the hardware node has told the agent it's ready, it can accept an action, then
--- eventually sends the result of the action
-AgentThenResult =
+-- These assertions check that when the agent tells a hardware node to perform an action, and once the hardware node has told the agent it's ready,
+-- it can accept an action, then eventually sends the result of the action
+AgentThenResult_Arm =
 
-curiosity_to_agent_nodeName.arm ->
-gwendolen_curiosity_arm?goal ->
-arm_curiosity_to_agent_nodeResult?goal ->
-SKIP
+(gwendolen_curiosity_arm?goal -> start_actions.arm -> arm_curiosity_to_agent_nodeResult.goal -> SKIP
+[| {|start_actions.arm  |} |]
+curiosity_to_agent_nodeName.arm -> start_actions.arm -> SKIP)
 
-|||
+assert AgentThenResult_Arm [T= Curiosity\(diff(Events, {|curiosity_to_agent_nodeName.arm, gwendolen_curiosity_arm, arm_curiosity_to_agent_nodeResult, start_actions.arm |}) )
+-- Traces, becasue otherwise it fails because of the data
 
-curiosity_to_agent_nodeName.mast ->
-gwendolen_curiosity_mast?goal ->
-mast_curiosity_to_agent_nodeResult?goal ->
-SKIP
+AgentThenResult_Mast =
 
-|||
+(gwendolen_curiosity_mast?goal -> start_actions.mast -> mast_curiosity_to_agent_nodeResult.goal -> SKIP
+[| {|start_actions.mast  |} |]
+curiosity_to_agent_nodeName.mast -> start_actions.mast -> SKIP)
 
-curiosity_to_agent_nodeName.wheels ->
-gwendolen_curiosity_wheels?goal ->
-wheels_curiosity_to_agent_nodeResult?goal -> 
-SKIP
+assert AgentThenResult_Mast [T= Curiosity\(diff(Events, {|curiosity_to_agent_nodeName.mast, gwendolen_curiosity_mast, mast_curiosity_to_agent_nodeResult, start_actions.mast |}) )
+-- Traces, becasue otherwise it fails because of the data
 
+AgentThenResult_Wheels =
 
--- Overarching check that the agent communicating with a client triggers the right events. Covers some of the previous two checks
+(gwendolen_curiosity_wheels?goal -> start_actions.wheels -> SKIP
+[| {|start_actions.wheels  |} |]
+curiosity_to_agent_nodeName.wheels ->  start_actions.wheels -> wheels_curiosity_to_agent_nodeResult -> SKIP)
 
-AgentTo
-
-gwendolen_curiosity_arm
+assert AgentThenResult_Wheels [T= Curiosity\(diff(Events, {|curiosity_to_agent_nodeName.wheels, gwendolen_curiosity_wheels, wheels_curiosity_to_agent_nodeResult, start_actions.wheels |}) )
+-- Traces, becasue otherwise it fails because of the data

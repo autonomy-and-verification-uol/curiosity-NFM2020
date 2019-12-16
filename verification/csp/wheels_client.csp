@@ -7,7 +7,7 @@ wheels_client_node =
   wheels_client(modereq)
 
 wheels_client(modereq) =
-  actionlib_init_client->
+  actionlib_init_client.wheels->
   wait_for_server_call.wheels -> wait_for_server_ret.wheels ->
   send_goal_wheels!modereq ->
   wait_for_result_call.wheels -> wait_for_result_ret.wheels ->
