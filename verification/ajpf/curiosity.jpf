@@ -1,0 +1,4 @@
+@using = mcapl
+
+target = ail.util.AJPF_w_AIL
+target.args = /curiosity-NFM2020/agent/curiosity.ail,/curiosity-NFM2020/verification/ajpf/curiosity.psl,1
